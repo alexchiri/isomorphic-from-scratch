@@ -1,0 +1,23 @@
+{
+  "name": "isomorphic-from-scratch",
+  "version": "1.0.0",
+  "description": "Starting a ReactJS app from scratch with the goal of having a bare isomorphic app to use as a skeleton.",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://alexchiri@github.com/alexchiri/isomorphic-from-scratch.git"
+  },
+  "keywords": [
+    "react",
+    "isomorphic",
+    "javascript"
+  ],
+  "author": "Alexandru Chiritescu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alexchiri/isomorphic-from-scratch/issues"
+  },
+  "homepage": "https://github.com/alexchiri/isomorphic-from-scratch#readme"
+}
