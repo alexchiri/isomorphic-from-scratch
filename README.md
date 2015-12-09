@@ -8,5 +8,7 @@ Besides having yet-another-starter-kit, I would like to take it step by step and
 
 * [https://github.com/RickWong/react-isomorphic-starterkit](https://github.com/RickWong/react-isomorphic-starterkit)
 * [https://github.com/RickWong/react-transmit](https://github.com/RickWong/react-transmit)
+* [https://github.com/coodoo/react-redux-isomorphic-example](https://github.com/coodoo/react-redux-isomorphic-example)
+
 
 ## TO BE CONTINUED...
