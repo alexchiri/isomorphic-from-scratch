@@ -7,7 +7,7 @@ import createBrowserHistory from 'history/lib/createBrowserHistory'
 import { Provider } from 'react-redux';
 import { fromJS } from 'immutable';
 import thunk from 'redux-thunk';
-import logger from 'redux-logger';
+import createLogger from 'redux-logger';
 import { createStore,
     combineReducers,
     applyMiddleware }  from 'redux';
@@ -20,8 +20,10 @@ if (window.$REDUX_STATE) {
     delete window.$REDUX_STATE;
 }
 
+const logger = createLogger();
+const createStoreWithMiddleware = applyMiddleware(thunk, logger)(createStore);
+const store = createStoreWithMiddleware(rootReducer, state);
 const history = createBrowserHistory();
-const store = applyMiddleware(thunk, logger)(createStore)(rootReducer, state);
 
 /**
  * Fire-up React Router.
