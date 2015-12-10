@@ -10,9 +10,6 @@ export class Counter extends Component {
     }
 
     handleIncrementClick() {
-        console.log("into handleIncrementClick");
-        console.log(this.props.increment);
-        console.log(increment);
         this.props.increment();
     }
     render() {

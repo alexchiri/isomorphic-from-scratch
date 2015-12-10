@@ -16,9 +16,8 @@ let state = null;
 if (window.$REDUX_STATE) {
     state = window.$REDUX_STATE;
 
-    //this delete doesn't do anything
+    //this delete doesn't do anything - figure out
     delete window.$REDUX_STATE;
-    console.log( 'server-rendering state restored: ', state );
 }
 
 const history = createBrowserHistory();

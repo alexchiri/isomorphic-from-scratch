@@ -24,8 +24,6 @@ const port     = process.env.PORT || 8000;
 app.use(serve("static", {defer: true}));
 
 app.use(function *(next) {
-    console.log("In here!");
-
     const location = createLocation(this.path);
     let history = createMemoryHistory();
     let routes = createRoutes(history);
@@ -41,8 +39,6 @@ app.use(function *(next) {
                 callback(error);
                 return;
             }
-
-            console.log("env", process.env.NODE_ENV);
 
             const index = fs.readFileSync(path.resolve(__dirname, '../index.html'), {encoding: 'utf-8'} );
             const store = applyMiddleware(thunk)(createStore)(rootReducer);
