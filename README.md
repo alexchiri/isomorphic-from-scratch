@@ -55,7 +55,7 @@ In order to access the `/counter` route, authentication is required. This is acc
                                                                                                                                  
 When the user submits the login form, its username and password are sent to an API endpoint running on the same node server that serves the client app. What this endpoint does, is pretty simple:
                                                                                                                                  
-```javascript 1.6
+```
 // normally you would get the user credentials from storage, but for this example they are hardcoded here:
 // you should not store the user's password, but a hash and then compare at login
 export const username = "dummyUser";
