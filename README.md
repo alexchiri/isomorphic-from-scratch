@@ -35,7 +35,7 @@ One cool thing about this approach (besides being more secure) is that the JS ap
 
 One of the approaches I found online (and I liked the most) for protecting the routes that require authentication is by wrapping the "parent" component with a function that verifies authentication. Take a look at the routes of this project:
 
-```jsx harmony
+```
 <Router history={history}>
     <Route path="/" component={App}>
         { /* Home (main) route */ }
@@ -92,8 +92,11 @@ Afterwards generates a JTW token (which will have the username as payload) using
 When the browser receives the response with the cookie, it will install the cookie in its cookie store. Because the cookie is httpOnly, the client JS app will not be able to read it, therefore secure for XSS attacks. Also, whenever a new call is done from the JS app to the server side, the browser will automatically attach the cookie to the request, and this way, authenticating the user.
 
 Go ahead and check, while giving this project a run, that the cookie is installed and then also sent with all the other requests.
+
 ![](http://0f8f28fe275e3a043777-67ab80ec00c7299bd1255995bf933a71.r1.cf2.rackcdn.com/Screen%20Shot%202016-01-30%2013%3A38%3A45%20%28Edited%29.jpg)
+
 ![](http://0f8f28fe275e3a043777-67ab80ec00c7299bd1255995bf933a71.r1.cf2.rackcdn.com/Screen%20Shot%202016-01-30%2013%3A39%3A19%20%28Edited%29.jpg)
+
 ![](http://0f8f28fe275e3a043777-67ab80ec00c7299bd1255995bf933a71.r1.cf2.rackcdn.com/Screen%20Shot%202016-01-30%2013%3A39%3A46.png)
                                                                                                                              
 One important detail, is that in order to have the browser to install the cookie in the store and to attach it to all subsequent request, there's a special flag that has to be set to the XHR request (more details here: [https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials).
