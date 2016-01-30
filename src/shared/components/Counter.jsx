@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import {connect} from 'react-redux';
-import {increment} from '../actions/counter';
+import {increment, getName} from '../actions/counter';
 import { bindActionCreators } from 'redux';
 
 export class Counter extends Component {
@@ -9,9 +9,16 @@ export class Counter extends Component {
         this.handleIncrementClick = this.handleIncrementClick.bind(this);
     }
 
+    componentWillMount() {
+        if(this.props.name == null) {
+            this.props.getName();
+        }
+    }
+
     handleIncrementClick() {
         this.props.increment();
     }
+
     render() {
         if (__SERVER__) {
             /**
@@ -27,11 +34,21 @@ export class Counter extends Component {
             console.log("Hello client");
         }
 
+        let counter = <div>Loading...</div>;
+
+        if(this.props.name != null) {
+            counter =
+                <div>
+                    <h3>Hi {this.props.username}!</h3>
+                    Here, play with {this.props.name}: <br/>
+                    <input type="text" value={this.props.counter}/>
+                    <input type="button" value="increment" onClick={this.handleIncrementClick}/>
+                </div>
+        }
+
         return(
             <div>
-                Counter: <br/>
-                <input type="text" value={this.props.counter}/>
-                <input type="button" value="increment" onClick={this.handleIncrementClick}/>
+                {counter}
             </div>
         );
     }
@@ -39,18 +56,23 @@ export class Counter extends Component {
 
 Counter.propTypes = {
     counter: PropTypes.number.isRequired,
-    increment: PropTypes.func.isRequired
+    increment: PropTypes.func.isRequired,
+    username: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired
 };
 
 function mapStateToProps(state) {
     return {
-        counter: state.counter.count
+        counter: state.counter.get('count'),
+        username: state.auth.get('username'),
+        name: state.counter.get('name')
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        increment: bindActionCreators(increment, dispatch)
+        increment: bindActionCreators(increment, dispatch),
+        getName: bindActionCreators(getName, dispatch)
     }
 }
 

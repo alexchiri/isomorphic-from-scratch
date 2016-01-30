@@ -3,27 +3,34 @@ import {Router} from 'react-router';
 import createRoutes from './shared/routes';
 import rootReducer from './shared/reducers/root';
 import ReactDOM from 'react-dom';
-import createBrowserHistory from 'history/lib/createBrowserHistory'
+import { browserHistory } from 'react-router'
 import { Provider } from 'react-redux';
 import { fromJS } from 'immutable';
 import thunk from 'redux-thunk';
 import createLogger from 'redux-logger';
+import { apiMiddleware } from 'redux-api-middleware';
 import { createStore,
     combineReducers,
     applyMiddleware }  from 'redux';
 
 let state = null;
 if (window.$REDUX_STATE) {
-    state = window.$REDUX_STATE;
+    let serverState = window.$REDUX_STATE;
+    let auth = serverState.auth;
+    let counter = serverState.counter;
+
+    state = {
+        auth: fromJS(auth),
+        counter: fromJS(counter)
+    };
 
     //this delete doesn't do anything - figure out
     delete window.$REDUX_STATE;
 }
 
 const logger = createLogger();
-const createStoreWithMiddleware = applyMiddleware(thunk, logger)(createStore);
+const createStoreWithMiddleware = applyMiddleware(thunk, apiMiddleware, logger)(createStore);
 const store = createStoreWithMiddleware(rootReducer, state);
-const history = createBrowserHistory();
 
 /**
  * Fire-up React Router.
@@ -32,7 +39,7 @@ const reactRoot = window.document.getElementById("container");
 
 ReactDOM.render(
     <Provider store={store}>
-        { createRoutes(store, history) }
+        { createRoutes(store, browserHistory) }
     </Provider>,
     reactRoot
 );

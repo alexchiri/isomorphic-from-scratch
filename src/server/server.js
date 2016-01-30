@@ -1,32 +1,44 @@
 import fs from 'fs';
 import path from 'path';
 import koa from "koa";
+import koaRouter from 'koa-router';
 import proxy from "koa-proxy";
 import serve from "koa-static";
 import React from "react";
 import ReactDOM from 'react-dom/server';
-import {Router, RoutingContext, match, Route} from "react-router";
+import {Router, RouterContext, match, Route} from "react-router";
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
-import createLocation from 'history/lib/createLocation'
-import createMemoryHistory from 'history/lib/createMemoryHistory';
+import {createMemoryHistory} from 'history'
 import { createStore,
     combineReducers,
     applyMiddleware }  from 'redux';
+import { apiMiddleware } from 'redux-api-middleware';
 
 import createRoutes from '../shared/routes';
 import rootReducer from '../shared/reducers/root';
+import auth from '../server/api/auth';
+import counter from '../server/api/counter';
 
 const app      = koa();
+const appRouter = koaRouter();
 const hostname = process.env.HOSTNAME || "localhost";
 const port     = process.env.PORT || 8000;
 
+const index = fs.readFileSync(path.resolve(__dirname, '../index.html'), {encoding: 'utf-8'} );
+const store = applyMiddleware(thunk, apiMiddleware)(createStore)(rootReducer);
+const webserver = process.env.NODE_ENV === "production" ? "" : "//" + hostname + ":8080";
+
 app.use(serve("static", {defer: true}));
 
+app.use(appRouter.routes());
+app.use(auth);
+app.use(counter);
+
 app.use(function *(next) {
-    const location = createLocation(this.path);
     let history = createMemoryHistory();
-    let routes = createRoutes(history);
+    const location = history.createLocation(this.path);
+    let routes = createRoutes(store, history);
 
     yield ((callback) => {
         match({routes, location}, (error, redirectLocation, renderProps) => {
@@ -40,13 +52,9 @@ app.use(function *(next) {
                 return;
             }
 
-            const index = fs.readFileSync(path.resolve(__dirname, '../index.html'), {encoding: 'utf-8'} );
-            const store = applyMiddleware(thunk)(createStore)(rootReducer);
-            const webserver = process.env.NODE_ENV === "production" ? "" : "//" + hostname + ":8080";
-
             var markup = ReactDOM.renderToString(
                 <Provider store={store}>
-                    <RoutingContext {...renderProps}/>
+                    <RouterContext {...renderProps}/>
                 </Provider>
             );
             let state = JSON.stringify( store.getState() );
