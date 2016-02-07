@@ -26,7 +26,6 @@ const hostname = process.env.HOSTNAME || "localhost";
 const port     = process.env.PORT || 8000;
 
 const index = fs.readFileSync(path.resolve(__dirname, '../index.html'), {encoding: 'utf-8'} );
-const store = applyMiddleware(thunk, apiMiddleware)(createStore)(rootReducer);
 const webserver = process.env.NODE_ENV === "production" ? "" : "//" + hostname + ":8080";
 
 app.use(serve("static", {defer: true}));
@@ -38,6 +37,7 @@ app.use(counter);
 app.use(function *(next) {
     let history = createMemoryHistory();
     const location = history.createLocation(this.path);
+    const store = applyMiddleware(thunk, apiMiddleware)(createStore)(rootReducer);
     let routes = createRoutes(store, history);
 
     yield ((callback) => {
