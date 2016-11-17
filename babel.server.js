@@ -4,11 +4,16 @@ require("babel-polyfill");
  * Configure babel using the require hook
  * More details here: https://babeljs.io/docs/setup/#babel_register
  */
-require("babel-core/register")({
+let babelProps = {
     only: /src/,
     presets: ["es2015", "react", "stage-0"]
-});
+};
 
+if (process.env.NODE_ENV !== "production") {
+    babelProps.plugins = ["react-hot-loader/babel"];
+}
+
+require("babel-core/register")(babelProps);
 /**
  * Define isomorphic constants.
  */

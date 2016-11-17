@@ -9,7 +9,7 @@ import ReactDOM from 'react-dom/server';
 import {Router, RouterContext, match, Route} from "react-router";
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
-import {createMemoryHistory} from 'history'
+import {createMemoryHistory, createLocation} from 'history'
 import { createStore,
     combineReducers,
     applyMiddleware }  from 'redux';
@@ -36,7 +36,7 @@ app.use(counter);
 
 app.use(function *(next) {
     let history = createMemoryHistory();
-    const location = history.createLocation(this.path);
+    const location = createLocation(this.path);
     const store = applyMiddleware(thunk, apiMiddleware)(createStore)(rootReducer);
     let routes = createRoutes(store, history);
 

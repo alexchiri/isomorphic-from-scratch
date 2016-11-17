@@ -4,7 +4,6 @@ var config = require("./webpack.client.js");
 var hostname = process.env.HOSTNAME || "localhost";
 
 config.cache = true;
-config.debug = true;
 config.devtool = "eval-sourcemap";
 
 config.entry.unshift(
@@ -17,12 +16,11 @@ config.output.hotUpdateMainFilename = "update/[hash]/update.json";
 config.output.hotUpdateChunkFilename = "update/[hash]/[id].update.js";
 
 config.plugins = [
-	new webpack.DefinePlugin({__CLIENT__: true, __SERVER__: false}),
-	new webpack.HotModuleReplacementPlugin()
-];
-
-config.module.postLoaders =  [
-	{test: /\.jsx?$/, loaders: ["react-hot"], exclude: /node_modules/}
+    new webpack.DefinePlugin({__CLIENT__: true, __SERVER__: false}),
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.LoaderOptionsPlugin({
+        debug: true
+    })
 ];
 
 config.devServer = {
